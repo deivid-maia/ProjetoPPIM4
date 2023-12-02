@@ -1,0 +1,33 @@
+{
+  "name": "projetoppim4",
+  "version": "1.0.0",
+  "description": "projeto desenvolvido para a aula ao vivo nº4",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deivid-maia/ProjetoPPIM4.git"
+  },
+  "keywords": [
+    "post",
+    "http",
+    "validação",
+    "servidor",
+    "cookies"
+  ],
+  "author": "Deivid Muller Maia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deivid-maia/ProjetoPPIM4/issues"
+  },
+  "homepage": "https://github.com/deivid-maia/ProjetoPPIM4#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3"
+  }
+}
