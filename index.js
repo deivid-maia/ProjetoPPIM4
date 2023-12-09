@@ -17,10 +17,10 @@ function processaCadastroUsuario(requisicao, resposta){
 
     const dados = requisicao.body;
     let conteudoResposta = '';
+    
     // é necessário validar os dados enviados
     // a validação dos dados é de responsabilidade da aplicação servidora
-    if (!(dados.nome && dados.telefone && dados.email && dados.senha
-    && dados.confirmarSenha)){
+    if (!(dados.nome && dados.dataNascimento && dados.nickName)){
         //estão faltando dados do usuário
         conteudoResposta = `
         <!DOCTYPE html>
@@ -28,7 +28,7 @@ function processaCadastroUsuario(requisicao, resposta){
         <head>
             <meta charset="UTF-8">
             <title>Formulário de Inscrição</title>
-            <link rel="stylesheet" href="estilo.css">
+            <link rel="stylesheet" href="estiloCadLogin.css">
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         </head>
@@ -46,62 +46,38 @@ function processaCadastroUsuario(requisicao, resposta){
         if(!dados.nome){
             conteudoResposta += `
                     <div>
-                        <p class="text-danger">Por favor, informe o nome !</p>
+                        <p class="text-danger">Por favor, informe seu nome !</p>
                     </div>`;
         }
 
         conteudoResposta +=`
                     <div class="form-group">
-                        <label for="telefone">Telefone</label>
-                        <input type="tel" id="telefone" name="telefone" value="${dados.telefone}">
-                    </div> `;
-        if(!dados.telefone){
+                        <label for="dataNascimento">Data de nascimento</label>
+                        <input type="date" id="dataNascimento" name="dataNascimento" value="${dados.dataNascimento}">
+                    </div>`;
+
+        if(!dados.dataNascimento){
             conteudoResposta +=`
                     <div>
-                        <p class="text-danger">Por favor, informe o telefone !</p>
+                        <p class="text-danger">Por favor, informe sua data de nascimento !</p>
                     </div>`;
               
         }
 
         conteudoResposta +=`
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" value="${dados.email}">
+                        <label for="nickName">Apelido</label>
+                        <input type="text" id="nickName" name="nickName" value="${dados.nickName}">
                     </div>`;
-        if(!dados.email){
+
+        if(!dados.nickName){
             conteudoResposta +=`
                     <div>
-                        <p class="text-danger">Por favor, informe o e-mail !</p>
+                        <p class="text-danger">Por favor, informe seu apelido !</p>
                     </div>`;
               
         }
-
-        conteudoResposta +=`
-                    <div class="form-group">
-                         <label for="senha">Senha</label>
-                        <input type="password" id="senha" name="senha" value="${dados.senha}">
-                    </div>`;
-        if(!dados.senha){
-            conteudoResposta +=`
-                    <div>
-                        <p class="text-danger">Por favor, informe a senha !</p>
-                    </div>`;
-              
-        }
-
-        conteudoResposta +=`
-                    <div class="form-group">
-                        <label for="confirmar-senha">Confirmar Senha</label>
-                        <input type="password" id="confirmarSenha" name="confirmarSenha" value="${dados.confirmarSenha}">
-                    </div>`;
-        if(!dados.confirmarSenha){
-            conteudoResposta +=`
-                    <div>
-                        <p class="text-danger">Por favor, confirme a senha !</p>
-                    </div>`;
-              
-        }
-
+   
         conteudoResposta += `
                     <button type="submit">Inscrever-se</button>
                             
@@ -121,10 +97,9 @@ function processaCadastroUsuario(requisicao, resposta){
 
     const usuario = {
         nome: dados.nome,
-        telefone: dados.telefone,
-        email: dados.email,
-        senha: dados.senha,
-        confirmarSenha: dados.confirmarSenha
+        dataNascimento: dados.dataNascimento,
+        nickName: dados.nickName,
+        
     }
 
     //adiciona um novo usuario na lista de usuarios já cadastrados
@@ -143,10 +118,8 @@ function processaCadastroUsuario(requisicao, resposta){
             <thead>
                 <tr>
                     <th>Nome</th>
-                    <th>Telefone</th>
-                    <th>Email</th>
-                    <th>Senha</th>
-                    <th>Confirmar senha</th>
+                    <th>Data de Nascimento</th>
+                    <th>Apelido</th>
                 </tr>
             </thead>
             <tbody>`;
@@ -155,10 +128,8 @@ function processaCadastroUsuario(requisicao, resposta){
          conteudoResposta += `
                         <tr>
                             <td>${usuario.nome}</td>
-                            <td>${usuario.telefone}</td>
-                            <td>${usuario.email}</td>
-                            <td>${usuario.senha}</td>
-                            <td>${usuario.confirmarSenha}</td>
+                            <td>${usuario.dataNascimento}</td>
+                            <td>${usuario.nickName}</td>
                         </tr>
                     
                     `;
@@ -198,7 +169,7 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         //tempo de vida da sessão
-        maxAge: 1000 * 60 * 15 // 15 minutos
+        maxAge: 1000 * 60 * 30 // 30 minutos
     }
 
 }))
@@ -230,7 +201,8 @@ app.get('/', autenticar, (requisicao, resposta) => {
             <body>
                 <h1> MENU </h1>
                 <ul>
-                    <li> <a href="/cadastroUsuario.html"> Cadastrar Usuário </a> </li>
+                    <li> <a href="/cadastroUsuario.html"> Cadastrar Usuário </a> </li><br>
+                    <li> <a href="/chat.html">Acessar o chat</a></li>
                 </ul>
             </body>
             <footer>

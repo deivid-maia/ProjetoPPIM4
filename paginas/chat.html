@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Nextech Solutions</title>
+  <author>Deivid Lucas Muller Maia</author>
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+  <h1>Webchat Nextech Solutions</h1>
+  <div class="chat-container">
+        <div class="messages" id="messages">
+        <!-- Aqui serão exibidas as mensagens -->
+        </div>
+        <div class="inputArea">
+            <p>Enviar mensagem para</p>
+            <form id="messageForm" action="/enviarMensagem" method="POST" onsubmit="event.preventDefault(); sendMessage()">
+            <select name="user" id="userSelect">
+                <option value="usuario1">Usuário 1</option>
+                <option value="usuario2">Usuário 2</option>
+                <!-- Adicione mais opções conforme necessário -->
+            </select>
+            <input type="text" name="message" id="messageInput" placeholder="Digite sua mensagem...">
+            <button type="submit">Enviar</button>
+        </div>
+        </form>
+    </div>
+    <div class="sair">
+         <button type="button">Sair</button>
+    </div>
+  <script src="script.js"></script>
+</body>
+</html>
