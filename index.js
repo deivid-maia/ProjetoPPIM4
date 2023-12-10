@@ -12,12 +12,15 @@ const porta = 3000;
 const host = '0.0.0.0';
 var listaUsuarios = [];
 
+
+
 function processaCadastroUsuario(requisicao, resposta){
     //extrair os dados do corpo da requisição, além de validar os dados
 
     const dados = requisicao.body;
     let conteudoResposta = '';
-    
+    let conteudoResposta2 = ''; // tentativa
+
     // é necessário validar os dados enviados
     // a validação dos dados é de responsabilidade da aplicação servidora
     if (!(dados.nome && dados.dataNascimento && dados.nickName)){
@@ -142,9 +145,16 @@ function processaCadastroUsuario(requisicao, resposta){
         <a class="btn btn-primary" href="/cadastroUsuario.html" role="button">Continuar cadastrando</a>
     </body>
     </html> `;
+
+   
+
         resposta.end(conteudoResposta);
-    } // final do if/else de validação
+        
+     // final do if/else de validação
 }                    
+
+}
+
 
 const app = express();
 
@@ -241,6 +251,11 @@ app.post('/login',(requisicao, resposta) =>{
 
 //rota para processar o cadastro de usuarios endpoint = '/cadastroUsuario'
 app.post('/cadastroUsuario', autenticar, processaCadastroUsuario);
+
+app.get('/chat', autenticar, (requisicao, resposta) => {
+    usuarioChat(listaUsuarios); // Passando a lista de usuários para a função usuarioChat
+});
+
 
 
 app.listen(porta, host, () => {

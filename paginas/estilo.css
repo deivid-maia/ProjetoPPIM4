@@ -45,6 +45,12 @@ body {
     font-size: 14px;
 
   }
+
+  .dataHora{
+    color: cadetblue;
+    font-size: 12px;
+    margin: 2px;
+  }
   input[type="text"],
   select,
   button {
