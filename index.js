@@ -1,3 +1,4 @@
+
 //MÓDULO 4
 
 // exibir a daata do último acesso (cookies)
@@ -12,18 +13,15 @@ const porta = 3000;
 const host = '0.0.0.0';
 var listaUsuarios = [];
 
-
-
 function processaCadastroUsuario(requisicao, resposta){
     //extrair os dados do corpo da requisição, além de validar os dados
 
     const dados = requisicao.body;
     let conteudoResposta = '';
-    let conteudoResposta2 = ''; // tentativa
-
     // é necessário validar os dados enviados
     // a validação dos dados é de responsabilidade da aplicação servidora
-    if (!(dados.nome && dados.dataNascimento && dados.nickName)){
+    if (!(dados.nome && dados.telefone && dados.email && dados.senha
+    && dados.confirmarSenha)){
         //estão faltando dados do usuário
         conteudoResposta = `
         <!DOCTYPE html>
@@ -31,7 +29,7 @@ function processaCadastroUsuario(requisicao, resposta){
         <head>
             <meta charset="UTF-8">
             <title>Formulário de Inscrição</title>
-            <link rel="stylesheet" href="estiloCadLogin.css">
+            <link rel="stylesheet" href="estilo.css">
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         </head>
@@ -49,38 +47,62 @@ function processaCadastroUsuario(requisicao, resposta){
         if(!dados.nome){
             conteudoResposta += `
                     <div>
-                        <p class="text-danger">Por favor, informe seu nome !</p>
+                        <p class="text-danger">Por favor, informe o nome !</p>
                     </div>`;
         }
 
         conteudoResposta +=`
                     <div class="form-group">
-                        <label for="dataNascimento">Data de nascimento</label>
-                        <input type="date" id="dataNascimento" name="dataNascimento" value="${dados.dataNascimento}">
-                    </div>`;
-
-        if(!dados.dataNascimento){
+                        <label for="telefone">Telefone</label>
+                        <input type="tel" id="telefone" name="telefone" value="${dados.telefone}">
+                    </div> `;
+        if(!dados.telefone){
             conteudoResposta +=`
                     <div>
-                        <p class="text-danger">Por favor, informe sua data de nascimento !</p>
+                        <p class="text-danger">Por favor, informe o telefone !</p>
                     </div>`;
               
         }
 
         conteudoResposta +=`
                     <div class="form-group">
-                        <label for="nickName">Apelido</label>
-                        <input type="text" id="nickName" name="nickName" value="${dados.nickName}">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" value="${dados.email}">
                     </div>`;
-
-        if(!dados.nickName){
+        if(!dados.email){
             conteudoResposta +=`
                     <div>
-                        <p class="text-danger">Por favor, informe seu apelido !</p>
+                        <p class="text-danger">Por favor, informe o e-mail !</p>
                     </div>`;
               
         }
-   
+
+        conteudoResposta +=`
+                    <div class="form-group">
+                         <label for="senha">Senha</label>
+                        <input type="password" id="senha" name="senha" value="${dados.senha}">
+                    </div>`;
+        if(!dados.senha){
+            conteudoResposta +=`
+                    <div>
+                        <p class="text-danger">Por favor, informe a senha !</p>
+                    </div>`;
+              
+        }
+
+        conteudoResposta +=`
+                    <div class="form-group">
+                        <label for="confirmar-senha">Confirmar Senha</label>
+                        <input type="password" id="confirmarSenha" name="confirmarSenha" value="${dados.confirmarSenha}">
+                    </div>`;
+        if(!dados.confirmarSenha){
+            conteudoResposta +=`
+                    <div>
+                        <p class="text-danger">Por favor, confirme a senha !</p>
+                    </div>`;
+              
+        }
+
         conteudoResposta += `
                     <button type="submit">Inscrever-se</button>
                             
@@ -100,9 +122,10 @@ function processaCadastroUsuario(requisicao, resposta){
 
     const usuario = {
         nome: dados.nome,
-        dataNascimento: dados.dataNascimento,
-        nickName: dados.nickName,
-        
+        telefone: dados.telefone,
+        email: dados.email,
+        senha: dados.senha,
+        confirmarSenha: dados.confirmarSenha
     }
 
     //adiciona um novo usuario na lista de usuarios já cadastrados
@@ -121,8 +144,10 @@ function processaCadastroUsuario(requisicao, resposta){
             <thead>
                 <tr>
                     <th>Nome</th>
-                    <th>Data de Nascimento</th>
-                    <th>Apelido</th>
+                    <th>Telefone</th>
+                    <th>Email</th>
+                    <th>Senha</th>
+                    <th>Confirmar senha</th>
                 </tr>
             </thead>
             <tbody>`;
@@ -131,8 +156,10 @@ function processaCadastroUsuario(requisicao, resposta){
          conteudoResposta += `
                         <tr>
                             <td>${usuario.nome}</td>
-                            <td>${usuario.dataNascimento}</td>
-                            <td>${usuario.nickName}</td>
+                            <td>${usuario.telefone}</td>
+                            <td>${usuario.email}</td>
+                            <td>${usuario.senha}</td>
+                            <td>${usuario.confirmarSenha}</td>
                         </tr>
                     
                     `;
@@ -145,16 +172,9 @@ function processaCadastroUsuario(requisicao, resposta){
         <a class="btn btn-primary" href="/cadastroUsuario.html" role="button">Continuar cadastrando</a>
     </body>
     </html> `;
-
-   
-
         resposta.end(conteudoResposta);
-        
-     // final do if/else de validação
+    } // final do if/else de validação
 }                    
-
-}
-
 
 const app = express();
 
@@ -179,7 +199,7 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         //tempo de vida da sessão
-        maxAge: 1000 * 60 * 30 // 30 minutos
+        maxAge: 1000 * 60 * 15 // 15 minutos
     }
 
 }))
@@ -192,43 +212,13 @@ app.use(express.urlencoded({extended: true}));
 //indicando para a aplicação como servir arquivos estáticos localizados na pasta 'paginas'
 app.use(express.static(path.join(process.cwd(),'paginas'))); // junto com a biblioteca path, faz a correção da localização da pasta pro deploy no vercel
 
-app.get('/', autenticar, (requisicao, resposta) => {
-
-    const DataUltimoAcesso = requisicao.cookies.DataUltimoAcesso;
-
-    const data = new Date();
-    resposta.cookie("DataUltimoAcesso", data.toLocaleString(), {
-        maxAge: 1000*60*60*24*30,
-        httpOnly: true
-    });
-
-    resposta.end(`
-        <!DOCTYPE html>
-            <head>
-                <meta charset="UTF-8">
-                <title> Menu do sistema </title>
-            </head>
-            <body>
-                <h1> MENU </h1>
-                <ul>
-                    <li> <a href="/cadastroUsuario.html"> Cadastrar Usuário </a> </li><br>
-                    <li> <a href="/chat.html">Acessar o chat</a></li>
-                </ul>
-            </body>
-            <footer>
-                <p>Seu último acesso nessa página foi em ${DataUltimoAcesso}</p>
-            </footer>
-        </html>
-        
-    `);
-})
-
 //endpoint login que irá processar o loggin da aplicação
 app.post('/login',(requisicao, resposta) =>{
     const usuario = requisicao.body.usuario;
     const senha = requisicao.body.senha;
     if(usuario && senha && (usuario === 'deivid') && (senha ==='112233')){
         requisicao.session.usuarioAutenticado = true;
+        requisicao.session.nomeUsuario = usuario;
         resposta.redirect('/');
     }
     else{
@@ -249,13 +239,42 @@ app.post('/login',(requisicao, resposta) =>{
 
 )
 
+
+app.get('/', autenticar, (requisicao, resposta) => {
+
+    const nomeUsuario = requisicao.session.nomeUsuario;
+    const DataUltimoAcesso = requisicao.cookies.DataUltimoAcesso;
+
+    const data = new Date();
+    resposta.cookie("DataUltimoAcesso", data.toLocaleString(), {
+        maxAge: 1000*60*60*24*30,
+        httpOnly: true
+    });
+
+    resposta.end(`
+        <!DOCTYPE html>
+            <head>
+                <meta charset="UTF-8">
+                <title> Menu do sistema </title>
+            </head>
+            <body>
+                <h1> MENU </h1>
+                <ul>
+                    <li> <a href="/cadastroUsuario.html"> Cadastrar Usuário </a> </li>
+                </ul>
+            </body>
+            <footer>
+                <p>Olá <strong>${nomeUsuario}</strong> ! Seu último acesso nessa página foi em ${DataUltimoAcesso}</p>
+            </footer>
+        </html>
+        
+    `);
+})
+
+
+
 //rota para processar o cadastro de usuarios endpoint = '/cadastroUsuario'
-app.post('/cadastroUsuario', autenticar, processaCadastroUsuario);
-
-app.get('/chat', autenticar, (requisicao, resposta) => {
-    usuarioChat(listaUsuarios); // Passando a lista de usuários para a função usuarioChat
-});
-
+app.post('/cadastroUsuario',autenticar, processaCadastroUsuario);
 
 
 app.listen(porta, host, () => {
